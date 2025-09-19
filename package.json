@@ -39,7 +39,6 @@
     "@modelcontextprotocol/sdk": "^1.17.0",
     "any-observable": "^0.5.1",
     "contentful-export": "^7.21.78",
-    "contentful-import": "^9.4.111",
     "contentful-management": "^11.54.3",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
