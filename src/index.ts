@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import 'any-observable/register/rxjs.js';
+
 import express, { Request, Response } from 'express';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
