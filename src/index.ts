@@ -68,6 +68,10 @@ async function runHttpServer() {
     // Parse JSON bodies
     app.use(express.json());
 
+    app.get('/', (req, res) => {
+      res.send('Hello World');
+    });
+
     // Health check endpoint
     app.get('/health', (req, res) => {
       res.json({
@@ -161,7 +165,7 @@ async function main() {
   const isHttpMode =
     process.env.MCP_HTTP_MODE === 'true' || process.argv.includes('--http');
 
-  if (isHttpMode) {
+  if (true) {
     console.log('Starting MCP server in HTTP mode...');
     await runHttpServer();
   } else {
