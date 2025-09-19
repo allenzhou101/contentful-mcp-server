@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
+    "any-observable": "^0.5.1",
     "contentful-export": "^7.21.78",
     "contentful-import": "^9.4.111",
     "contentful-management": "^11.54.3",
@@ -46,6 +47,7 @@
     "get-it": "^8.6.10",
     "gpt-tokenizer": "^2.9.0",
     "outdent": "^0.8.0",
+    "rxjs": "^7.8.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {

@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+
+// Register Observable polyfill before any other imports
+import 'any-observable/register/rxjs';
+
 import express, { Request, Response } from 'express';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
