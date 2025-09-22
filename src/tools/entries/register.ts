@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { searchEntriesTool, SearchEntriesToolParams } from './searchEntries.js';
 import { createEntryTool, CreateEntryToolParams } from './createEntry.js';
-import { deleteEntryTool, DeleteEntryToolParams } from './deleteEntry.js';
+// import { deleteEntryTool, DeleteEntryToolParams } from './deleteEntry.js';
 import { updateEntryTool, UpdateEntryToolParams } from './updateEntry.js';
 import { getEntryTool, GetEntryToolParams } from './getEntry.js';
 import { publishEntryTool, PublishEntryToolParams } from './publishEntry.js';
@@ -39,12 +39,12 @@ export function registerEntriesTools(server: McpServer) {
     updateEntryTool,
   );
 
-  server.tool(
-    'delete_entry',
-    'Delete a specific content entry from your Contentful space',
-    DeleteEntryToolParams.shape,
-    deleteEntryTool,
-  );
+  // server.tool(
+  //   'delete_entry',
+  //   'Delete a specific content entry from your Contentful space',
+  //   DeleteEntryToolParams.shape,
+  //   deleteEntryTool,
+  // );
 
   server.tool(
     'publish_entry',
