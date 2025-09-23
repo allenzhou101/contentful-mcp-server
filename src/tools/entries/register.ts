@@ -2,13 +2,13 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { searchEntriesTool, SearchEntriesToolParams } from './searchEntries.js';
 import { createEntryTool, CreateEntryToolParams } from './createEntry.js';
 // import { deleteEntryTool, DeleteEntryToolParams } from './deleteEntry.js';
-import { updateEntryTool, UpdateEntryToolParams } from './updateEntry.js';
+// import { updateEntryTool, UpdateEntryToolParams } from './updateEntry.js';
 import { getEntryTool, GetEntryToolParams } from './getEntry.js';
-import { publishEntryTool, PublishEntryToolParams } from './publishEntry.js';
-import {
-  unpublishEntryTool,
-  UnpublishEntryToolParams,
-} from './unpublishEntry.js';
+// import { publishEntryTool, PublishEntryToolParams } from './publishEntry.js';
+// import {
+//   unpublishEntryTool,
+//   UnpublishEntryToolParams,
+// } from './unpublishEntry.js';
 
 export function registerEntriesTools(server: McpServer) {
   server.tool(
@@ -32,12 +32,12 @@ export function registerEntriesTools(server: McpServer) {
     getEntryTool,
   );
 
-  server.tool(
-    'update_entry',
-    "Update an existing entry. The handler will merge your field updates with the existing entry fields, so you only need to provide the fields you want to change. However, for multiple-locale fields, all existing locales must be included in the update. IMPORTANT: All field values MUST include a locale key (e.g., 'en-US') for each value, like: { title: { 'en-US': 'My Updated Title' } }. Every field in Contentful requires a locale even for single-language content. When updating entries with multiple locales, always include all existing locales in the update to prevent overwriting with empty values. RICH TEXT FIELDS: When updating rich text fields, ALL text nodes MUST include a 'marks' property (can be empty array [] for no formatting). Text nodes with formatting need appropriate marks: { nodeType: 'text', value: 'Bold text', marks: [{ type: 'bold' }], data: {} }.",
-    UpdateEntryToolParams.shape,
-    updateEntryTool,
-  );
+  // server.tool(
+  //   'update_entry',
+  //   "Update an existing entry. The handler will merge your field updates with the existing entry fields, so you only need to provide the fields you want to change. However, for multiple-locale fields, all existing locales must be included in the update. IMPORTANT: All field values MUST include a locale key (e.g., 'en-US') for each value, like: { title: { 'en-US': 'My Updated Title' } }. Every field in Contentful requires a locale even for single-language content. When updating entries with multiple locales, always include all existing locales in the update to prevent overwriting with empty values. RICH TEXT FIELDS: When updating rich text fields, ALL text nodes MUST include a 'marks' property (can be empty array [] for no formatting). Text nodes with formatting need appropriate marks: { nodeType: 'text', value: 'Bold text', marks: [{ type: 'bold' }], data: {} }.",
+  //   UpdateEntryToolParams.shape,
+  //   updateEntryTool,
+  // );
 
   // server.tool(
   //   'delete_entry',
@@ -46,17 +46,17 @@ export function registerEntriesTools(server: McpServer) {
   //   deleteEntryTool,
   // );
 
-  server.tool(
-    'publish_entry',
-    'Publish an entry or multiple entries. Accepts either a single entryId (string) or an array of entryIds (up to 100 entries). For a single entry, it uses the standard publish operation. For multiple entries, it automatically uses bulk publishing.',
-    PublishEntryToolParams.shape,
-    publishEntryTool,
-  );
+  // server.tool(
+  //   'publish_entry',
+  //   'Publish an entry or multiple entries. Accepts either a single entryId (string) or an array of entryIds (up to 100 entries). For a single entry, it uses the standard publish operation. For multiple entries, it automatically uses bulk publishing.',
+  //   PublishEntryToolParams.shape,
+  //   publishEntryTool,
+  // );
 
-  server.tool(
-    'unpublish_entry',
-    'Unpublish an entry or multiple entries. Accepts either a single entryId (string) or an array of entryIds (up to 100 entries). For a single entry, it uses the standard unpublish operation. For multiple entries, it automatically uses bulk unpublishing.',
-    UnpublishEntryToolParams.shape,
-    unpublishEntryTool,
-  );
+  // server.tool(
+  //   'unpublish_entry',
+  //   'Unpublish an entry or multiple entries. Accepts either a single entryId (string) or an array of entryIds (up to 100 entries). For a single entry, it uses the standard unpublish operation. For multiple entries, it automatically uses bulk unpublishing.',
+  //   UnpublishEntryToolParams.shape,
+  //   unpublishEntryTool,
+  // );
 }
