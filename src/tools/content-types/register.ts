@@ -7,26 +7,6 @@ import {
   listContentTypesTool,
   ListContentTypesToolParams,
 } from './listContentTypes.js';
-import {
-  createContentTypeTool,
-  CreateContentTypeToolParams,
-} from './createContentType.js';
-import {
-  updateContentTypeTool,
-  UpdateContentTypeToolParams,
-} from './updateContentType.js';
-import {
-  deleteContentTypeTool,
-  DeleteContentTypeToolParams,
-} from './deleteContentType.js';
-import {
-  publishContentTypeTool,
-  PublishContentTypeToolParams,
-} from './publishContentType.js';
-import {
-  unpublishContentTypeTool,
-  UnpublishContentTypeToolParams,
-} from './unpublishContentType.js';
 
 export function registerContentTypesTools(server: McpServer) {
   server.tool(

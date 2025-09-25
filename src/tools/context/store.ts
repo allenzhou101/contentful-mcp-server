@@ -1,5 +1,6 @@
 interface InitialContext {
   hasGlobalContext: boolean;
+  spaceIdOverride?: string;
 }
 
 class ContextStore {
@@ -17,6 +18,18 @@ class ContextStore {
 
   resetInitialContext(): void {
     this.context.hasGlobalContext = false;
+  }
+
+  setSpaceIdOverride(spaceId: string): void {
+    this.context.spaceIdOverride = spaceId;
+  }
+
+  getSpaceIdOverride(): string | undefined {
+    return this.context.spaceIdOverride;
+  }
+
+  clearSpaceIdOverride(): void {
+    this.context.spaceIdOverride = undefined;
   }
 }
 

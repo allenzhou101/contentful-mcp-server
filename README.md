@@ -86,6 +86,17 @@ When running in HTTP mode, you can optionally secure the MCP server by setting t
 
 This provides a simple way to protect your MCP server from unauthorized access when exposed over HTTP.
 
+#### Space ID Override (HTTP Mode Only)
+
+When running in HTTP mode, you can dynamically override the default space ID by including the `X-Contentful-Space-Id` header in your requests. This allows you to work with different Contentful spaces without reconfiguring the server:
+
+- Include `X-Contentful-Space-Id: <space-id>` header in requests to `/mcp`
+- The header value takes precedence over the `SPACE_ID` environment variable
+- If no header is provided, the server falls back to the configured `SPACE_ID` environment variable
+- Individual tool parameters can still override both the header and environment values
+
+This feature is useful when you need to work with multiple Contentful spaces from the same MCP server instance.
+
 Below is a sample configuration:
 
 ```json

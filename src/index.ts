@@ -11,6 +11,7 @@ import { registerAllResources } from './resources/register.js';
 import { registerAllTools } from './tools/register.js';
 import { VERSION } from './config/version.js';
 import { env } from './config/env.js';
+import { contextStore } from './tools/context/store.js';
 
 if (process.env.NODE_ENV === 'development') {
   try {
@@ -113,7 +114,10 @@ async function runHttpServer() {
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, X-Contentful-Space-Id',
+      );
       if (req.method === 'OPTIONS') {
         res.sendStatus(200);
         return;
@@ -123,6 +127,17 @@ async function runHttpServer() {
 
     // Parse JSON bodies
     app.use(express.json());
+
+    // Middleware to capture space ID from headers
+    app.use('/mcp', (req, res, next) => {
+      const spaceIdHeader = req.headers['x-contentful-space-id'] as string;
+      if (spaceIdHeader) {
+        contextStore.setSpaceIdOverride(spaceIdHeader);
+      } else {
+        contextStore.clearSpaceIdOverride();
+      }
+      next();
+    });
 
     app.get('/', (req, res) => {
       res.send('Hello World');
