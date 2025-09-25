@@ -20,6 +20,10 @@ const EnvSchema = z.object({
     .default('master')
     .describe('Contentful environment ID'),
   ORGANIZATION_ID: z.string().optional().describe('Contentful organization ID'),
+  MCP_SERVER_AUTH_TOKEN: z
+    .string()
+    .optional()
+    .describe('Bearer token for MCP server authorization'),
 });
 
 export const env = EnvSchema.safeParse(process.env);

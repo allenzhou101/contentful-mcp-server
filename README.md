@@ -63,17 +63,28 @@ npm run build
 
 ### Environment Variables
 
-| Environment Variable                 | Required | Default Value        | Description                                          |
-| ------------------------------------ | -------- | -------------------- | ---------------------------------------------------- |
-| `CONTENTFUL_MANAGEMENT_ACCESS_TOKEN` | ✅ Yes   | -                    | Your Contentful Management API personal access token |
-| `SPACE_ID`                           | ✅ Yes   | -                    | Your Contentful Space ID                             |
-| `ENVIRONMENT_ID`                     | ❌ No    | `master`             | Target environment within your space                 |
-| `CONTENTFUL_HOST`                    | ❌ No    | `api.contentful.com` | Contentful API host                                  |
-| `NODE_ENV`                           | ❌ No    | `production`         | Node Environment to run in                           |
+| Environment Variable                 | Required | Default Value        | Description                                                |
+| ------------------------------------ | -------- | -------------------- | ---------------------------------------------------------- |
+| `CONTENTFUL_MANAGEMENT_ACCESS_TOKEN` | ✅ Yes   | -                    | Your Contentful Management API personal access token       |
+| `SPACE_ID`                           | ✅ Yes   | -                    | Your Contentful Space ID                                   |
+| `ENVIRONMENT_ID`                     | ❌ No    | `master`             | Target environment within your space                       |
+| `CONTENTFUL_HOST`                    | ❌ No    | `api.contentful.com` | Contentful API host                                        |
+| `MCP_SERVER_AUTH_TOKEN`              | ❌ No    | -                    | Bearer token for MCP server authorization (HTTP mode only) |
+| `NODE_ENV`                           | ❌ No    | `production`         | Node Environment to run in                                 |
 
 ### Configuration
 
 Refer to the documentation for your AI tool of choice for how to configure MCP servers. For example, see the documentation for [Cursor](https://docs.cursor.com/context/mcp), [VS Code](https://code.visualstudio.com/docs/copilot/chat/mcp-servers), or [Claude Desktop](https://modelcontextprotocol.io/quickstart/user).
+
+#### Authorization (HTTP Mode Only)
+
+When running in HTTP mode, you can optionally secure the MCP server by setting the `MCP_SERVER_AUTH_TOKEN` environment variable. When this token is set:
+
+- All requests to the `/mcp` endpoint must include an `Authorization: Bearer <token>` header
+- Requests without the header or with an invalid token will receive a `401 Unauthorized` response
+- If no token is configured, authorization is disabled and all requests are allowed
+
+This provides a simple way to protect your MCP server from unauthorized access when exposed over HTTP.
 
 Below is a sample configuration:
 
@@ -87,7 +98,8 @@ Below is a sample configuration:
         "CONTENTFUL_MANAGEMENT_ACCESS_TOKEN": "your-CMA-token",
         "SPACE_ID": "your-space-id",
         "ENVIRONMENT_ID": "master",
-        "CONTENTFUL_HOST": "api.contentful.com"
+        "CONTENTFUL_HOST": "api.contentful.com",
+        "MCP_SERVER_AUTH_TOKEN": "your-bearer-token"
       }
     }
   }

@@ -10,6 +10,7 @@ import { registerAllPrompts } from './prompts/register.js';
 import { registerAllResources } from './resources/register.js';
 import { registerAllTools } from './tools/register.js';
 import { VERSION } from './config/version.js';
+import { env } from './config/env.js';
 
 if (process.env.NODE_ENV === 'development') {
   try {
@@ -20,6 +21,61 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const MCP_SERVER_NAME = '@contentful/mcp-server';
+
+/**
+ * Middleware to validate Bearer token authorization
+ */
+function validateBearerToken(req: Request, res: Response, next: () => void) {
+  // If no auth token is configured, skip validation
+  if (!env.success || !env.data.MCP_SERVER_AUTH_TOKEN) {
+    next();
+    return;
+  }
+
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    res.status(401).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32001,
+        message: 'Authorization header required',
+      },
+      id: null,
+    });
+    return;
+  }
+
+  const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
+
+  if (!bearerMatch) {
+    res.status(401).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32001,
+        message: 'Invalid authorization format. Expected: Bearer <token>',
+      },
+      id: null,
+    });
+    return;
+  }
+
+  const token = bearerMatch[1];
+
+  if (token !== env.data.MCP_SERVER_AUTH_TOKEN) {
+    res.status(401).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32001,
+        message: 'Invalid authorization token',
+      },
+      id: null,
+    });
+    return;
+  }
+
+  next();
+}
 
 function getServer() {
   const server = new McpServer({
@@ -82,38 +138,42 @@ async function runHttpServer() {
       });
     });
 
-    app.post('/mcp', async (req: Request, res: Response) => {
-      // In stateless mode, create a new instance of transport and server for each request
-      // to ensure complete isolation. A single instance would cause request ID collisions
-      // when multiple clients connect concurrently.
+    app.post(
+      '/mcp',
+      validateBearerToken,
+      async (req: Request, res: Response) => {
+        // In stateless mode, create a new instance of transport and server for each request
+        // to ensure complete isolation. A single instance would cause request ID collisions
+        // when multiple clients connect concurrently.
 
-      try {
-        const server = getServer();
-        const transport: StreamableHTTPServerTransport =
-          new StreamableHTTPServerTransport({
-            sessionIdGenerator: undefined,
+        try {
+          const server = getServer();
+          const transport: StreamableHTTPServerTransport =
+            new StreamableHTTPServerTransport({
+              sessionIdGenerator: undefined,
+            });
+          res.on('close', () => {
+            console.log('Request closed');
+            transport.close();
+            server.close();
           });
-        res.on('close', () => {
-          console.log('Request closed');
-          transport.close();
-          server.close();
-        });
-        await server.connect(transport);
-        await transport.handleRequest(req, res, req.body);
-      } catch (error) {
-        console.error('Error handling MCP request:', error);
-        if (!res.headersSent) {
-          res.status(500).json({
-            jsonrpc: '2.0',
-            error: {
-              code: -32603,
-              message: 'Internal server error',
-            },
-            id: null,
-          });
+          await server.connect(transport);
+          await transport.handleRequest(req, res, req.body);
+        } catch (error) {
+          console.error('Error handling MCP request:', error);
+          if (!res.headersSent) {
+            res.status(500).json({
+              jsonrpc: '2.0',
+              error: {
+                code: -32603,
+                message: 'Internal server error',
+              },
+              id: null,
+            });
+          }
         }
-      }
-    });
+      },
+    );
 
     // SSE notifications not supported in stateless mode
     app.get('/mcp', async (req: Request, res: Response) => {
@@ -162,8 +222,8 @@ async function runHttpServer() {
 
 async function main() {
   // Check if we should run in HTTP mode
-  const isHttpMode =
-    process.env.MCP_HTTP_MODE === 'true' || process.argv.includes('--http');
+  // const isHttpMode =
+  //   process.env.MCP_HTTP_MODE === 'true' || process.argv.includes('--http');
 
   if (true) {
     console.log('Starting MCP server in HTTP mode...');
