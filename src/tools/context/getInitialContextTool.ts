@@ -38,6 +38,7 @@ async function tool(_params: Params) {
 
     <todaysDate>${todaysDate}</todaysDate>
   `;
+  console.log('message', message);
 
   contextStore.setInitialContextLoaded();
 

@@ -131,6 +131,7 @@ async function runHttpServer() {
     // Middleware to capture space ID from headers
     app.use('/mcp', (req, res, next) => {
       const spaceIdHeader = req.headers['x-contentful-space-id'] as string;
+      console.log('spaceIdHeader', spaceIdHeader);
       if (spaceIdHeader) {
         contextStore.setSpaceIdOverride(spaceIdHeader);
       } else {
